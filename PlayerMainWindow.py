@@ -39,7 +39,7 @@ class Ui_PlayerMainWindow(object):
 
         song_font = QtGui.QFont()
         song_font.setFamily("Segoe UI")
-        song_font.setPointSize(10)
+        song_font.setPointSize(12)
         song_font.setBold(True)
         song_font.setItalic(True)
         self.label = QtWidgets.QLabel(self.centralwidget)
