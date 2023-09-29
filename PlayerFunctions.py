@@ -4,6 +4,7 @@ from tkinter import filedialog
 
 from PyQt5.QtCore import QUrl, pyqtSignal, QObject
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
+from PyQt5.QtWidgets import QFileDialog
 
 
 def set_song_title(label, song_title):
@@ -13,7 +14,7 @@ def set_song_title(label, song_title):
 
 
 
-class PlayerFunctions():
+class PlayerFunctions:
 
 
     song_list = []
@@ -21,7 +22,7 @@ class PlayerFunctions():
     playlist = QMediaPlaylist()
     i = 0
     isPlaying = False
-    media_changed = pyqtSignal(str)
+
 
     def play_music(self, label):
 
@@ -81,4 +82,18 @@ class PlayerFunctions():
 
 
     def open_full_folder(self):
-        pass
+
+        filetypes =(("MP3 fájlok", "*.mp3"),
+                    ("FLAC fájlok", "*.flac"),
+                    ("MP4 fájlok", "*.mp4"),
+                    ("M4A fájlok", "*.m4a"))
+
+        file_paths, _ = QFileDialog.getOpenFileNames(None, "Fájlok kiválasztása", "", ";;".join(f"{name} ({pattern})" for name, pattern in filetypes))
+
+        if file_paths:
+             for file_path in file_paths:
+                media = QMediaContent(QUrl.fromLocalFile(file_path))
+                self.playlist.addMedia(media)
+
+
+

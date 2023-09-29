@@ -279,7 +279,7 @@ class Ui_PlayerMainWindow(object):
         self.menuF_jlok_bet_lt_se.setTitle(_translate("PlayerMainWindow", "Fájlok betöltése"))
         self.menuS_g.setTitle(_translate("PlayerMainWindow", "Súgó"))
         self.mnISelectFiles.setText(_translate("PlayerMainWindow", "Fájlok kiválasztása"))
-        self.mnILoadFullFOlder.setText(_translate("PlayerMainWindow", "Teljes mappa betöltése"))
+        self.mnILoadFullFOlder.setText(_translate("PlayerMainWindow", "Több fájl/mappa betöltése"))
         self.label.setText(_translate("PlayerMainWindow",""))
 
 
