@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 # Form implementation generated from reading ui file 'PyPlayerFőAblak.ui'
 #
@@ -9,14 +10,23 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSlot
+
+from PlayerFunctions import PlayerFunctions
 
 
 class Ui_PlayerMainWindow(object):
+
+
+
     def setupUi(self, PlayerMainWindow):
         PlayerMainWindow.setObjectName("PlayerMainWindow")
         PlayerMainWindow.resize(900, 400)
         PlayerMainWindow.setMinimumSize(QtCore.QSize(900, 400))
         PlayerMainWindow.setMaximumSize(QtCore.QSize(900, 400))
+
+        self.function = PlayerFunctions()
+
         font = QtGui.QFont()
         font.setFamily("MS UI Gothic")
         font.setPointSize(6)
@@ -25,11 +35,13 @@ class Ui_PlayerMainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("B:/IntellijProjects/PyPlayer/static/music_ico.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         PlayerMainWindow.setWindowIcon(icon)
+
         self.centralwidget = QtWidgets.QWidget(PlayerMainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         song_font = QtGui.QFont()
         song_font.setFamily("Segoe UI")
-        song_font.setPointSize(10)
+        song_font.setPointSize(12)
         song_font.setBold(True)
         song_font.setItalic(True)
         self.label = QtWidgets.QLabel(self.centralwidget)
@@ -44,6 +56,8 @@ class Ui_PlayerMainWindow(object):
                                  "color: rgb(253, 253, 255);""\n"
                                  "}\n"
                                  "")
+
+
         self.lblBackground = QtWidgets.QLabel(self.centralwidget)
         self.lblBackground.setGeometry(QtCore.QRect(-4, -21, 910, 540))
         self.lblBackground.setFocusPolicy(QtCore.Qt.StrongFocus)
@@ -52,6 +66,7 @@ class Ui_PlayerMainWindow(object):
         self.lblBackground.setTextFormat(QtCore.Qt.AutoText)
         self.lblBackground.setPixmap(QtGui.QPixmap("B:/IntellijProjects/PyPlayer/static/background.jpg"))
         self.lblBackground.setObjectName("lblBackground")
+
         self.btnPlay = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnPlay.setGeometry(QtCore.QRect(20, 260, 172, 55))
         font = QtGui.QFont()
@@ -74,6 +89,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnPlay.setObjectName("btnPlay")
+        self.btnPlay.clicked.connect(lambda: self.function.play_music(self.label))
+
         self.btnNext = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnNext.setGeometry(QtCore.QRect(270, 260, 172, 55))
         font = QtGui.QFont()
@@ -96,6 +113,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnNext.setObjectName("btnNext")
+        self.btnNext.clicked.connect(lambda: self.function.next_song(self.label))
+
         self.btnPrevious = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnPrevious.setGeometry(QtCore.QRect(460, 260, 172, 55))
         font = QtGui.QFont()
@@ -118,6 +137,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnPrevious.setObjectName("btnPrevious")
+        self.btnPrevious.clicked.connect(lambda: self.function.previous_song(self.label))
+
         self.btnPause = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnPause.setGeometry(QtCore.QRect(700, 260, 172, 55))
         font = QtGui.QFont()
@@ -140,6 +161,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnPause.setObjectName("btnPause")
+        self.btnPause.clicked.connect(lambda: self.function.pause())
+
         self.btnMusicList = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnMusicList.setGeometry(QtCore.QRect(20, 115, 172, 55))
         font = QtGui.QFont()
@@ -162,6 +185,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnMusicList.setObjectName("btnMusicList")
+        self.btnMusicList.clicked.connect(lambda: self.function.show_music_list())
+
         self.btnStop = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.btnStop.setGeometry(QtCore.QRect(700, 115, 172, 55))
         font = QtGui.QFont()
@@ -184,6 +209,8 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "")
         self.btnStop.setObjectName("btnStop")
+        self.btnStop.clicked.connect(lambda: self.function.stop_music(self.label))
+
         self.lblBackground.raise_()
         self.label.raise_()
         self.btnMusicList.raise_()
@@ -224,14 +251,13 @@ class Ui_PlayerMainWindow(object):
         font.setWeight(75)
         self.mnISelectFiles.setFont(font)
         self.mnISelectFiles.setObjectName("mnISelectFiles")
+        self.mnISelectFiles.triggered.connect(lambda: self.function.open_files())
+
         self.mnILoadFullFOlder = QtWidgets.QAction(PlayerMainWindow)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setItalic(True)
-        font.setWeight(75)
-        font.setKerning(False)
         self.mnILoadFullFOlder.setFont(font)
         self.mnILoadFullFOlder.setObjectName("mnILoadFullFOlder")
+        self.mnILoadFullFOlder.triggered.connect(lambda: self.function.open_full_folder())
+
         self.menuF_jlok_bet_lt_se.addAction(self.mnISelectFiles)
         self.menuF_jlok_bet_lt_se.addSeparator()
         self.menuF_jlok_bet_lt_se.addAction(self.mnILoadFullFOlder)
@@ -254,7 +280,7 @@ class Ui_PlayerMainWindow(object):
         self.menuS_g.setTitle(_translate("PlayerMainWindow", "Súgó"))
         self.mnISelectFiles.setText(_translate("PlayerMainWindow", "Fájlok kiválasztása"))
         self.mnILoadFullFOlder.setText(_translate("PlayerMainWindow", "Teljes mappa betöltése"))
-        self.label.setText(_translate("PlayerMainWindow","Zene.mp3"))
+        self.label.setText(_translate("PlayerMainWindow",""))
 
 
 
