@@ -1,7 +1,9 @@
 import os
+import time
 from tkinter import filedialog
-import pygame as pygame
-from mutagen.mp3 import MP3
+
+from PyQt5.QtCore import QUrl, pyqtSignal, QObject
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 
 
 def set_song_title(label, song_title):
@@ -11,40 +13,59 @@ def set_song_title(label, song_title):
 
 
 
-class PlayerFunctions:
+class PlayerFunctions():
+
 
     song_list = []
-    pygame.init()
-    pygame.mixer.init()
+    player = QMediaPlayer()
+    playlist = QMediaPlaylist()
+    i = 0
+    isPlaying = False
+    media_changed = pyqtSignal(str)
 
     def play_music(self, label):
 
-        if len(self.song_list) > 0:
-            for item in self.song_list:
-                song_title = os.path.basename(item)
-                set_song_title(label, song_title)
-                pygame.mixer_music.load(item)
-                audio = MP3(item)
-                pygame.mixer_music.play()
-                pygame.time.wait(int(audio.info.length*1000))
-
-
-
+        self.player.setPlaylist(self.playlist)
+        self.player.play()
+        self.isPlaying = True
+        path = self.player.currentMedia().canonicalUrl().toString()
+        song_title = os.path.basename(path)
 
     def next_song(self, label):
-        pass
+
+        if self.isPlaying:
+            self.player.stop()
+            self.playlist.next()
+            self.player.play()
+        else:
+            self.playlist.next()
+            self.player.play()
 
     def previous_song(self, label):
-        pass
+
+        if self.isPlaying:
+            self.player.stop()
+            self.playlist.previous()
+            self.player.play()
+        else:
+            self.playlist.previous()
+            self.player.play()
 
     def pause(self):
-        pass
+        if self.isPlaying:
+            self.player.pause()
+            self.isPlaying = False
+        elif self.player.PausedState:
+            self.player.play()
+            self.isPlaying = True
 
     def show_music_list(self):
         pass
 
     def stop_music(self, label):
-        pass
+        if self.isPlaying:
+            self.player.stop()
+            self.isPlaying = False
 
     def open_files(self):
 
@@ -54,7 +75,9 @@ class PlayerFunctions:
                     ("*.M4A fájlok",".m4a"))
 
         file_path = filedialog.askopenfilename(filetypes=filetypes)
-        self.song_list.append(file_path)
+        content = QMediaContent(QUrl.fromLocalFile(file_path))
+        self.playlist.addMedia(content)
+
 
 
     def open_full_folder(self):

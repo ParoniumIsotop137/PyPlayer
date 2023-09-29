@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 # Form implementation generated from reading ui file 'PyPlayerFőAblak.ui'
 #
@@ -9,6 +10,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSlot
 
 from PlayerFunctions import PlayerFunctions
 
@@ -54,6 +56,7 @@ class Ui_PlayerMainWindow(object):
                                  "color: rgb(253, 253, 255);""\n"
                                  "}\n"
                                  "")
+
 
         self.lblBackground = QtWidgets.QLabel(self.centralwidget)
         self.lblBackground.setGeometry(QtCore.QRect(-4, -21, 910, 540))
