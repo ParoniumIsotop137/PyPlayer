@@ -12,6 +12,7 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 
+from ListWindow import Ui_listWindow
 from PlayerFunctions import PlayerFunctions
 
 
@@ -35,6 +36,7 @@ class Ui_PlayerMainWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("B:/IntellijProjects/PyPlayer/static/music_ico.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         PlayerMainWindow.setWindowIcon(icon)
+
 
         self.centralwidget = QtWidgets.QWidget(PlayerMainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -266,6 +268,7 @@ class Ui_PlayerMainWindow(object):
 
         self.retranslateUi(PlayerMainWindow)
         QtCore.QMetaObject.connectSlotsByName(PlayerMainWindow)
+
 
     def retranslateUi(self, PlayerMainWindow):
         _translate = QtCore.QCoreApplication.translate
