@@ -3,7 +3,7 @@ import sys
 import time
 from tkinter import filedialog
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QUrl, pyqtSignal, QObject
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtWidgets import QFileDialog
@@ -12,6 +12,7 @@ from ListWindow import Ui_listWindow
 
 
 class PlayerFunctions:
+
 
     listWindow = None
     playlist_window = None
@@ -109,4 +110,8 @@ class PlayerFunctions:
 
         label.setText(song_title)
         label.repaint()
+
+    def close_list_window(self):
+
+        self.listWindow.close()
 

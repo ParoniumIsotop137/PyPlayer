@@ -269,6 +269,8 @@ class Ui_PlayerMainWindow(object):
         self.retranslateUi(PlayerMainWindow)
         QtCore.QMetaObject.connectSlotsByName(PlayerMainWindow)
 
+        PlayerMainWindow.closeEvent = self.close_event_handler
+
 
     def retranslateUi(self, PlayerMainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -286,4 +288,7 @@ class Ui_PlayerMainWindow(object):
         self.label.setText(_translate("PlayerMainWindow",""))
 
 
-
+    def close_event_handler(self, event):
+        if self.function.listWindow is not None:
+            self.function.close_list_window()
+        event.accept()

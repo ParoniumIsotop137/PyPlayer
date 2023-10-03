@@ -11,19 +11,20 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import PlayerMainWindow
+
 
 class Ui_listWindow(object):
     def setupUi(self, listWindow):
         listWindow.setObjectName("listWindow")
-        listWindow.resize(400, 300)
+        listWindow.resize(400, 350)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("B:/IntellijProjects/PyPlayer/static/list_ico.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         listWindow.setWindowIcon(icon)
         listWindow.setAutoFillBackground(False)
-        listWindow.setStyleSheet("QDialog#listWindow {\n"
-"\n"
-"background: qradialgradient(spread:repeat, cx:0.5, cy:0.5, radius:0.077, fx:0.5, fy:0.5, stop:0 rgba(0, 169, 255, 147), stop:0.497326 rgba(0, 0, 0, 147), stop:1 rgba(0, 169, 255, 147))\n"
-"}")
+        listWindow.setStyleSheet("\n"
+                                 "background: qradialgradient(spread:repeat, cx:0.5, cy:0.5, radius:0.077, fx:0.5, fy:0.5, stop:0 rgba(0, 169, 255, 147), stop:0.497326 rgba(0, 0, 0, 147), stop:1 rgba(0, 169, 255, 147))\n"
+                                 )
         self.listView = QtWidgets.QListWidget(listWindow)
         self.listView.setGeometry(QtCore.QRect(0, 0, 401, 251))
         font = QtGui.QFont()
@@ -33,15 +34,15 @@ class Ui_listWindow(object):
         font.setWeight(75)
         self.listView.setFont(font)
         self.listView.setAutoFillBackground(True)
+        self.listView.setObjectName("listView")
         self.listView.setStyleSheet("QListWidget#listView {\n"
 "\n"
 "background:qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:1, stop:0.129944 rgba(163, 15, 15, 255), stop:1 rgba(255, 255, 255, 255));\n"
 "\n"
 "color: rgb(255, 255, 255)\n"
 "}")
-        self.listView.setObjectName("listView")
         self.btnHide = QtWidgets.QPushButton(listWindow)
-        self.btnHide.setGeometry(QtCore.QRect(150, 260, 75, 23))
+        self.btnHide.setGeometry(QtCore.QRect(150, 285, 90, 35))
         font = QtGui.QFont()
         font.setFamily("Segoe Script")
         font.setPointSize(12)
@@ -57,6 +58,7 @@ class Ui_listWindow(object):
 "\n"
 "}")
         self.btnHide.setObjectName("btnHide")
+        self.btnHide.clicked.connect(listWindow.close)
         self.btnHide.raise_()
         self.listView.raise_()
 
@@ -81,6 +83,8 @@ class Ui_listWindow(object):
         for index in range(song_list.mediaCount()):
             media = song_list.media(index)
             self.listView.addItem(os.path.basename(media.canonicalUrl().toString()))
+
+
 
 if __name__ == "__main__":
     import sys
