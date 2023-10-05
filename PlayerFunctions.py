@@ -1,17 +1,28 @@
 import os
 import sys
+import threading
 import time
+from multiprocessing.sharedctypes import synchronized
 from tkinter import filedialog
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QUrl, pyqtSignal, QObject
+
+from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtCore import QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtWidgets import QFileDialog
 
+import PlayerMainWindow
 from ListWindow import Ui_listWindow
+
+def update_label(player, label):
+
+    song_title = os.path.basename(player.currentMedia().canonicalUrl().toString())
+    label.setText(song_title)
+    label.repaint()
 
 
 class PlayerFunctions:
+
 
     listWindow = None
     playlist_window = None
@@ -19,15 +30,18 @@ class PlayerFunctions:
     playlist = QMediaPlaylist()
     i = 0
     isPlaying = False
-
+    label = None
 
     def play_music(self, label):
 
+        self.label = label
         self.player.setPlaylist(self.playlist)
+
         self.player.play()
         self.isPlaying = True
-        label.setText(os.path.basename(self.player.currentMedia().canonicalUrl().toString()))
-        label.repaint()
+        song_title = os.path.basename(self.player.currentMedia().canonicalUrl().toString())
+        label.setText(song_title)
+        self.playlist.currentMediaChanged.connect(lambda: update_label(self.player, label))
 
     def next_song(self, label):
 
@@ -104,9 +118,7 @@ class PlayerFunctions:
                 media = QMediaContent(QUrl.fromLocalFile(file_path))
                 self.playlist.addMedia(media)
 
+    def close_list_window(self):
 
-    def set_song_title(self, label, song_title):
-
-        label.setText(song_title)
-        label.repaint()
+        self.listWindow.close()
 
