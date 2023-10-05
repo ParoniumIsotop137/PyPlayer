@@ -11,6 +11,7 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QMessageBox
 
 from ListWindow import Ui_listWindow
 from PlayerFunctions import PlayerFunctions
@@ -265,6 +266,7 @@ class Ui_PlayerMainWindow(object):
         self.menuF_jlok_bet_lt_se.addAction(self.mnILoadFullFOlder)
         self.menubar.addAction(self.menuF_jlok_bet_lt_se.menuAction())
         self.menubar.addAction(self.menuS_g.menuAction())
+        self.menuS_g.aboutToShow.connect(self.show_info)
 
         self.retranslateUi(PlayerMainWindow)
         QtCore.QMetaObject.connectSlotsByName(PlayerMainWindow)
@@ -295,3 +297,10 @@ class Ui_PlayerMainWindow(object):
         if self.function.listWindow is not None:
             self.function.close_list_window()
         event.accept()
+
+    def show_info(self):
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Information)
+        message.setWindowTitle("Segítség és infó")
+        message.setText("Az első menüpontból egyesével lehet fájlokat kiválasztani, míg a másodikból egyszerre több fájl, vagy akár egy egész mappa tartalma is betölthető.\n\nAuthor: Paronai Ferenc\nhorwathslos29@gmail.com")
+        message.exec()
