@@ -9,7 +9,7 @@ from tkinter import filedialog
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtCore import QUrl, pyqtSignal
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 import PlayerMainWindow
 from ListWindow import Ui_listWindow
@@ -20,7 +20,6 @@ def update_label(player, label):
     label.setText(song_title)
     label.repaint()
 
-
 class PlayerFunctions:
 
 
@@ -30,46 +29,72 @@ class PlayerFunctions:
     playlist = QMediaPlaylist()
     i = 0
     isPlaying = False
+    stopButton = False
     label = None
+
 
     def play_music(self, label):
 
-        self.label = label
-        self.player.setPlaylist(self.playlist)
+        if not self.playlist.isEmpty():
+            try:
 
-        self.player.play()
-        self.isPlaying = True
-        song_title = os.path.basename(self.player.currentMedia().canonicalUrl().toString())
-        label.setText(song_title)
-        self.playlist.currentMediaChanged.connect(lambda: update_label(self.player, label))
+                self.label = label
+                self.player.setPlaylist(self.playlist)
+
+                self.player.play()
+                self.isPlaying = True
+                self.stopButton = False
+                song_title = os.path.basename(self.player.currentMedia().canonicalUrl().toString())
+                label.setText(song_title)
+                self.playlist.currentMediaChanged.connect(lambda: update_label(self.player, label))
+            except Exception as e:
+                message = QMessageBox()
+                message.setIcon(QMessageBox.Critical)
+                message.setWindowTitle("Hiba történt!")
+                message.setText(str(e))
+                message.exec()
+        else:
+            self.missing_files_message()
 
     def next_song(self, label):
-
-        if self.isPlaying:
-            self.player.stop()
-            self.playlist.next()
-            self.player.play()
+        if not self.playlist.isEmpty():
+            if self.isPlaying:
+                self.player.stop()
+                self.playlist.next()
+                self.player.play()
+            else:
+                self.playlist.next()
+                self.player.play()
         else:
-            self.playlist.next()
-            self.player.play()
+            self.missing_files_message()
 
     def previous_song(self, label):
-
-        if self.isPlaying:
-            self.player.stop()
-            self.playlist.previous()
-            self.player.play()
+        if not self.playlist.isEmpty():
+            if self.isPlaying:
+                self.player.stop()
+                self.playlist.previous()
+                self.player.play()
+            else:
+                self.playlist.previous()
+                self.player.play()
         else:
-            self.playlist.previous()
-            self.player.play()
+            self.missing_files_message()
 
     def pause(self):
-        if self.isPlaying:
-            self.player.pause()
-            self.isPlaying = False
-        elif self.player.PausedState:
-            self.player.play()
-            self.isPlaying = True
+        if not self.playlist.isEmpty():
+            if self.isPlaying:
+                self.player.pause()
+                self.isPlaying = False
+
+            elif self.stopButton:
+                 self.player.stop()
+                 self.isPlaying = False
+
+            elif self.player.PausedState:
+                  self.player.play()
+                  self.isPlaying = True
+        else:
+            self.missing_files_message()
 
     def show_music_list(self):
 
@@ -82,14 +107,17 @@ class PlayerFunctions:
         else:
             self.playlist_window.update_items(self.playlist)
             self.listWindow.show()
-        
-
 
 
     def stop_music(self, label):
-        if self.isPlaying:
-            self.player.stop()
-            self.isPlaying = False
+
+        if not self.playlist.isEmpty():
+            if self.isPlaying:
+                self.player.stop()
+                self.isPlaying = False
+                self.stopButton = True
+        else:
+            self.missing_files_message()
 
     def open_files(self):
 
@@ -117,8 +145,23 @@ class PlayerFunctions:
              for file_path in file_paths:
                 media = QMediaContent(QUrl.fromLocalFile(file_path))
                 self.playlist.addMedia(media)
-
+        else:
+            message = QMessageBox()
+            message.setIcon(QMessageBox.Information)
+            message.setWindowTitle("Fájbetöltés sikertelen")
+            message.setText("Nem került betöltésre egyetlen fájl sem. Az eddig betöltött zenék megtekinthetőek a zenelistában.")
+            message.exec()
     def close_list_window(self):
 
         self.listWindow.close()
+
+
+    def missing_files_message(self):
+        message = QMessageBox()
+        message.setIcon(QMessageBox.Warning)
+        message.setWindowTitle("Nincs lejátszandó fájl!")
+        message.setText("Még nem került betöltésre egy zenefájl sem a menüből!")
+        message.exec()
+
+
 
