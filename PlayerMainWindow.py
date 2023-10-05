@@ -49,7 +49,7 @@ class Ui_PlayerMainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(220, 130, 450, 35))
         self.label.setAutoFillBackground(False)
-        self.label.setText("Zene.mp3")
+       # self.label.setText("Zene.mp3")
         self.label.setObjectName("label")
         self.label.setFont(song_font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
@@ -270,6 +270,9 @@ class Ui_PlayerMainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(PlayerMainWindow)
 
         PlayerMainWindow.closeEvent = self.close_event_handler
+
+
+
 
 
     def retranslateUi(self, PlayerMainWindow):
